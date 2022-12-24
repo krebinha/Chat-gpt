@@ -2,7 +2,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 
 # Executa o comando curl para fazer uma requisição HTTP GET para a página
-output = subprocess.run(['curl', '-s', 'https://geralinks.com.br'], capture_output=True).stdout
+output = subprocess.run(['curl', '-s', 'https://geralinks.com.br/'], capture_output=True).stdout
 
 # Verifica se a requisição foi bem-sucedida
 if output:
