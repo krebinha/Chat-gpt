@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # Faz a solicitação HTTP para o site
-URL = 'http://www.geralinks.com.br'
+URL = 'https://geralinks.com.br/entretenimento'
 page = requests.get(URL)
 
 # Analisa o HTML da página
