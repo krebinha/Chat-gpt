@@ -15,16 +15,14 @@ with open('rss.xml', 'w') as f:
     f.write('  <channel>\n')
     f.write('    <title>Geralinks</title>\n')
 
-# Encontra todos os elementos com a tag <h2> que possuem a classe "title"
-titles = soup.find_all('h2', class_='title')
+# Encontra todos os elementos com a tag <a>
+links = soup.find_all('a')
 
-# Adiciona os títulos e links de cada artigo encontrado ao arquivo XML
-for title in titles:
-    link = title.find('a')['href']
+# Adiciona os links de cada elemento <a> encontrado ao arquivo XML
+for link in links:
     with open('rss.xml', 'a') as f:
         f.write(f'    <item>\n')
-        f.write(f'      <title>{title.text}</title>\n')
-        f.write(f'      <link>{link}</link>\n')
+        f.write(f'      <link>{URL}{link["href"]}</link>\n')
         f.write(f'    </item>\n')
 
 # Finaliza o arquivo XML
