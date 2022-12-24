@@ -1,28 +1,33 @@
-import subprocess
-import xml.etree.ElementTree as ET
+import requests
+from bs4 import BeautifulSoup
 
-# Executa o comando curl para fazer uma requisição HTTP GET para a página
-output = subprocess.run(['curl', '-s', 'https://geralinks.com.br/'], capture_output=True).stdout
+# Faz a solicitação HTTP para o site
+URL = 'http://www.geralinks.com.br'
+page = requests.get(URL)
 
-# Verifica se a requisição foi bem-sucedida
-if output:
-  # Cria um objeto Beautiful Soup a partir da string HTML
-  soup = BeautifulSoup(output, 'html.parser')
-  
-  # Cria um elemento raiz para o documento XML
-  root = ET.Element('root')
-  
-  # Encontra todas as tags <a> que contêm um atributo 'href'
-  links = soup.find_all('a', href=True)
-  
-  # Adiciona os links encontrados como elementos filhos do elemento raiz
-  for link in links:
-    ET.SubElement(root, 'link').text = link['href']
-  
-  # Cria um objeto ElementTree a partir do elemento raiz
-  tree = ET.ElementTree(root)
-  
-  # Escreve o documento XML em um arquivo
-  tree.write('links.xml', encoding='utf-8', xml_declaration=True)
-else:
-  print("Erro ao fazer a requisição")
+# Analisa o HTML da página
+soup = BeautifulSoup(page.content, 'html.parser')
+
+# Cria um arquivo XML vazio
+with open('rss.xml', 'w') as f:
+    f.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    f.write('<rss version="2.0">\n')
+    f.write('  <channel>\n')
+    f.write('    <title>Geralinks</title>\n')
+
+# Encontra todos os elementos com a tag <h2> que possuem a classe "title"
+titles = soup.find_all('h2', class_='title')
+
+# Adiciona os títulos e links de cada artigo encontrado ao arquivo XML
+for title in titles:
+    link = title.find('a')['href']
+    with open('rss.xml', 'a') as f:
+        f.write(f'    <item>\n')
+        f.write(f'      <title>{title.text}</title>\n')
+        f.write(f'      <link>{link}</link>\n')
+        f.write(f'    </item>\n')
+
+# Finaliza o arquivo XML
+with open('rss.xml', 'a') as f:
+    f.write('  </channel>\n')
+    f.write('</rss>\n')
