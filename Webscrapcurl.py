@@ -1,12 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
 
-# Faz a solicitação HTTP para o site
-URL = 'https://geralinks.com.br/entretenimento'
-page = requests.get(URL)
+# Faz a solicitação HTTP para o site e salva a resposta em um arquivo chamado response.html
+URL = 'http://www.geralinks.com.br'
+response = requests.get(URL)
+
+with open('response.html', 'w') as f:
+    f.write(response.text)
+
+# Abre o arquivo response.html
+with open('response.html', 'r') as f:
+    html = f.read()
 
 # Analisa o HTML da página
-soup = BeautifulSoup(page.content, 'html.parser')
+soup = BeautifulSoup(html, 'html.parser')
 
 # Cria um arquivo XML vazio
 with open('rss.xml', 'w') as f:
