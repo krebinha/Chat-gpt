@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 import xml.etree.ElementTree as ET
 
 # Faz uma requisição HTTP GET para a página
-response = requests.get(https://geralinks.com.br/)
+response = requests.get('https://geralinks.com.br')
 
 # Verifica se a requisição foi bem-sucedida
 if response.status_code == 200:
